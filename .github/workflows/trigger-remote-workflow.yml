@@ -5,9 +5,9 @@ permissions:
 
 on: 
   workflow_dispatch:
-  # workflow_run:
-  #   workflows: [PR workflow workaround]
-  #   types: [completed]
+  workflow_run:
+    workflows: [PR workflow workaround]
+    types: [completed]
 jobs:
   external-PR:
       runs-on: ubuntu-latest
