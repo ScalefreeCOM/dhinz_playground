@@ -12,5 +12,13 @@ jobs:
       steps:
         - name: trigger
           id: trigger
-          run: echo "Workflow completed"
+          env: 
+            ACTOR: ${{ github.actor }}
+          run: |
+            mkdir -p ./actor
+            echo $ACTOR > ./actor/actor
+        - uses: actions/upload-artifact@v4
+          with:
+            name: actor
+            path: actor/
     
