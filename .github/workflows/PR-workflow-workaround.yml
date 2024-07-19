@@ -1,0 +1,16 @@
+name: "PR workflow workaround"
+
+permissions:
+  issues: write
+
+on: 
+  pull_request:
+    types: [opened]
+jobs:
+  trigger-main-workflow:
+      runs-on: ubuntu-latest
+      steps:
+        - name: trigger
+          id: trigger
+          run: echo "Workflow completed"
+    

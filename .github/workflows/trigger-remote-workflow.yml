@@ -4,8 +4,9 @@ permissions:
   issues: write
 
 on: 
-  pull_request:
-    types: [opened]
+  workflow_run:
+    workflows: [PR workflow workaround]
+    types: [completed]
 jobs:
   external-PR:
       runs-on: ubuntu-latest
