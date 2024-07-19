@@ -34,22 +34,23 @@ jobs:
         - name: debug
           run: echo ${{ steps.user_affiliation.outputs.isTeamMember }}
         
-        - name: Manual approval
-          id: manual_approval
-          uses: trstringer/manual-approval@v1
-          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
-          timeout-minutes: 20
-          with:
-            secret: ${{ steps.generate_token.outputs.token }}
-            approvers: DamianHinz
-            minimum-approvals: ${{ vars.MINIMUM_APPROVALS }}
-            issue-title: "External PR: Waiting for approval"
-            issue-body: "Please approve with 'yes', 'go', 'approve', 'approved', 'lgtm'  or deny with 'deny', 'denied', 'no', 'stop'. The workflow will be stopped automatically after ${{ vars.PR_TIMEOUT_MINUTES }} Minutes."
-            exclude-workflow-initiator-as-approver: false
-            additional-approved-words: 'GO'
-            additional-denied-words: 'STOP'
+        # - name: Manual approval
+        #   id: manual_approval
+        #   uses: trstringer/manual-approval@v1
+        #   if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
+        #   timeout-minutes: 20
+        #   with:
+        #     secret: ${{ steps.generate_token.outputs.token }}
+        #     approvers: DamianHinz
+        #     minimum-approvals: ${{ vars.MINIMUM_APPROVALS }}
+        #     issue-title: "External PR: Waiting for approval"
+        #     issue-body: "Please approve with 'yes', 'go', 'approve', 'approved', 'lgtm'  or deny with 'deny', 'denied', 'no', 'stop'. The workflow will be stopped automatically after ${{ vars.PR_TIMEOUT_MINUTES }} Minutes."
+        #     exclude-workflow-initiator-as-approver: false
+        #     additional-approved-words: 'GO'
+        #     additional-denied-words: 'STOP'
         
         - name: Call Workflow
+          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
           env: 
             GH_TOKEN: ${{ steps.generate_token.outputs.token }}
           run: |
