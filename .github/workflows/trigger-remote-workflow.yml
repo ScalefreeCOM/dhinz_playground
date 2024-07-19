@@ -37,7 +37,7 @@ jobs:
         - name: Manual approval
           id: manual_approval
           uses: trstringer/manual-approval@v1
-          if: ${{ ! steps.user_affiliation.outputs.isTeamMember }}
+          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
           timeout-minutes: ${{ vars.PR_TIMEOUT_MINUTES}}
           with:
             secret: ${{ steps.generate_token.outputs.token }}
