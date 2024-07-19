@@ -12,37 +12,7 @@ jobs:
   external-PR:
       runs-on: ubuntu-latest
       steps:  
-        # - name: 'Download artifact'
-        #   uses: actions/github-script@v6
-        #   with:
-        #     script: |
-        #       let allArtifacts = await github.rest.actions.listWorkflowRunArtifacts({
-        #         owner: context.repo.owner,
-        #         repo: context.repo.repo,
-        #         run_id: context.payload.workflow_run.id,
-        #       });
-        #       let matchArtifact = allArtifacts.data.artifacts.filter((artifact) => {
-        #         return artifact.name == "actor"
-        #       })[0];
-        #       let download = await github.rest.actions.downloadArtifact({
-        #           owner: context.repo.owner,
-        #           repo: context.repo.repo,
-        #           artifact_id: matchArtifact.id,
-        #           archive_format: 'zip',
-        #       });
-        #       let fs = require('fs');
-        #       fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/pr_number.zip`, Buffer.from(download.data));
-
-
-        # - name: Unzip artifact
-        #   run: unzip actor.zip   
-          
-        # - name: Extract actor
-        #   run: |
-        #     let fs = require('fs');
-        #     let actor = String(fs.readFileSync('./pr_number'));
-        #     echo $actor
-
+      
         - name: Generate token
           id: generate_token
           uses: actions/create-github-app-token@v1
@@ -52,7 +22,6 @@ jobs:
             owner: ${{ github.repository_owner }}
             repositories: "dhinz_playground,datavault4dbt-ci-cd"
         
-
         - name: Checking User Identity
           id: user_affiliation
           uses: tspascoal/get-user-teams-membership@v2
@@ -61,15 +30,18 @@ jobs:
             username: ${{ github.actor }}
             organization: ${{ github.repository_owner }}
             team: 'datavault4dbt-devs'
+
+        - name: debug
+          run: echo ${{ steps.user_affiliation.outputs.isTeamMember }}
         
         - name: Manual approval
           id: manual_approval
           uses: trstringer/manual-approval@v1
-          if: ${{ steps.user_affiliation.outputs.isTeamMember == false}}
+          if: ${{ ! steps.user_affiliation.outputs.isTeamMember }}
           timeout-minutes: ${{ vars.PR_TIMEOUT_MINUTES}}
           with:
             secret: ${{ steps.generate_token.outputs.token }}
-            approvers: datavault4dbt-devs
+            approvers: DamianHinz
             minimum-approvals: ${{ vars.MINIMUM_APPROVALS }}
             issue-title: "External PR: Waiting for approval"
             issue-body: "Please approve with 'yes', 'go', 'approve', 'approved', 'lgtm'  or deny with 'deny', 'denied', 'no', 'stop'. The workflow will be stopped automatically after ${{ vars.PR_TIMEOUT_MINUTES }} Minutes."
@@ -87,3 +59,8 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
             -f "ref=main"
+  
+  # internal-PR:
+  #   runs-on: ubuntu-latest
+  #   if: 
+  #   steps:
