@@ -29,7 +29,7 @@ jobs:
             GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
             username: ${{ github.actor }}
             #organization: {{ github.repository_owner }}
-            team: 'datavault4dbt-devs,Datavault4dbt Devs'
+            team: 'Datavault4dbt Devs'
 
         - name: debug
           run: echo ${{ steps.user_affiliation.outputs.isTeamMember }}
@@ -37,7 +37,7 @@ jobs:
         - name: Manual approval
           id: manual_approval
           uses: trstringer/manual-approval@v1
-          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
+          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
           timeout-minutes: 20
           with:
             secret: ${{ steps.generate_token.outputs.token }}
