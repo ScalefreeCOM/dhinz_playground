@@ -19,7 +19,7 @@ jobs:
             app-id: ${{ secrets.WORKFLOW_APP_ID }}  
             private-key: ${{ secrets.WORKFLOW_APP_PRIVATE_KEY }}
             owner: ${{ github.repository_owner }}
-            repositories: "datavault4dbt,datavault4dbt-ci-cd"
+            repositories: "dhinz_playground,datavault4dbt-ci-cd"
         
 
         - name: Checking User Identity
