@@ -1,0 +1,26 @@
+name: "PR workflow workaround"
+
+permissions:
+  issues: write
+
+on: 
+  workflow_dispatch:
+  pull_request:
+    types: [opened]
+jobs:
+  trigger-main-workflow:
+      runs-on: ubuntu-latest
+      steps:
+        - name: trigger
+          id: trigger
+          env: 
+            ACTOR: ${{ github.actor }}
+          run: |
+            mkdir -p ./actor
+            echo $ACTOR > ./actor/actor
+            echo $ACTOR
+        - uses: actions/upload-artifact@v4
+          with:
+            name: actor
+            path: actor/
+    

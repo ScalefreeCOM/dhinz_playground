@@ -4,12 +4,15 @@ permissions:
   issues: write
 
 on: 
-  pull_request:
-    types: [opened]
+  workflow_dispatch:
+  workflow_run:
+    workflows: [PR workflow workaround]
+    types: [completed]
 jobs:
   external-PR:
       runs-on: ubuntu-latest
       steps:  
+      
         - name: Generate token
           id: generate_token
           uses: actions/create-github-app-token@v1
@@ -17,9 +20,8 @@ jobs:
             app-id: ${{ secrets.WORKFLOW_APP_ID }}  
             private-key: ${{ secrets.WORKFLOW_APP_PRIVATE_KEY }}
             owner: ${{ github.repository_owner }}
-            repositories: "datavault4dbt,datavault4dbt-ci-cd"
+            repositories: "dhinz_playground,datavault4dbt-ci-cd"
         
-
         - name: Checking User Identity
           id: user_affiliation
           uses: tspascoal/get-user-teams-membership@v2
@@ -28,15 +30,18 @@ jobs:
             username: ${{ github.actor }}
             organization: ${{ github.repository_owner }}
             team: 'datavault4dbt-devs'
+
+        - name: debug
+          run: echo ${{ steps.user_affiliation.outputs.isTeamMember }}
         
         - name: Manual approval
           id: manual_approval
           uses: trstringer/manual-approval@v1
-          if: ${{ steps.user_affiliation.outputs.isTeamMember == false}}
-          timeout-minutes: ${{ vars.PR_TIMEOUT_MINUTES}}
+          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
+          timeout-minutes: 20  #{{ vars.PR_TIMEOUT_MINUTES}}
           with:
             secret: ${{ steps.generate_token.outputs.token }}
-            approvers: datavault4dbt-devs
+            approvers: DamianHinz
             minimum-approvals: ${{ vars.MINIMUM_APPROVALS }}
             issue-title: "External PR: Waiting for approval"
             issue-body: "Please approve with 'yes', 'go', 'approve', 'approved', 'lgtm'  or deny with 'deny', 'denied', 'no', 'stop'. The workflow will be stopped automatically after ${{ vars.PR_TIMEOUT_MINUTES }} Minutes."
@@ -54,3 +59,8 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
             -f "ref=main"
+  
+  # internal-PR:
+  #   runs-on: ubuntu-latest
+  #   if: 
+  #   steps:
