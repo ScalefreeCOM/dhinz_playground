@@ -72,13 +72,17 @@ jobs:
             skip_unpack: false
             path: ./
         
-        - name: extract-labels
+        - name: extract-artifact
+          id: extract-artifact
           if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
           run: |
-            ls
-            cd label
-            ls
-            cat label
+            echo "labels=$(cat label/label)" >> $GITHUB_OUTPUT
+        
+        - name: trigger-labeled-workflow
+          if: ${{ steps.extract-artifact.outputs.labels == 'true' }}
+          run: echo "test passed"
+
+            
 
   
   # internal-PR:
