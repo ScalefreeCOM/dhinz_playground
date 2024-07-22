@@ -6,21 +6,21 @@ permissions:
 on: 
   workflow_dispatch:
   pull_request:
-    types: [opened]
+    types: [opened, labeled]
 jobs:
-  trigger-main-workflow:
+  uploading-labels:
       runs-on: ubuntu-latest
       steps:
-        - name: trigger
-          id: trigger
+        - name: 
+          id: up-labels
           env: 
-            ACTOR: ${{ github.actor }}
+            LABEL: ${{ github.event.label.name }}
           run: |
-            mkdir -p ./actor
-            echo $ACTOR > ./actor/actor
-            echo $ACTOR
+            mkdir -p ./label
+            echo $LABEL > ./label/label
+            echo $LABEL
         - uses: actions/upload-artifact@v4
           with:
-            name: actor
-            path: actor/
+            name: label
+            path: label/
     
