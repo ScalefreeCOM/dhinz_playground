@@ -78,7 +78,7 @@ jobs:
             ls
             cd label
             ls
-            cat ./label/label
+            cat label/label
 
   
   # internal-PR:
