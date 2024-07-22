@@ -6,7 +6,7 @@ permissions:
 on: 
   workflow_dispatch:
   pull_request:
-    types: [opened, labeled]
+    types: [opened]
 jobs:
   uploading-labels:
       runs-on: ubuntu-latest
