@@ -69,11 +69,16 @@ jobs:
             github_token: ${{ steps.generate_token.outputs.token }}
             workflow: PR-workflow-workaround.yml
             workflow_search: false
+            skip_unpack: false
             path: ./
         
         - name: extract-labels
           if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
-          run: cat ./label/label
+          run: |
+            ls
+            cd label
+            ls
+            cat ./label/label
 
   
   # internal-PR:
