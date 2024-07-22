@@ -33,21 +33,6 @@ jobs:
         - name: Outpu Team Membership
           run: echo "Member of datavault4dbt dev team; ${{ steps.user_affiliation.outputs.isTeamMember }}"
         
-        # - name: Manual approval
-        #   id: manual_approval
-        #   uses: trstringer/manual-approval@v1
-        #   if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
-        #   timeout-minutes: 20
-        #   with:
-        #     secret: ${{ steps.generate_token.outputs.token }}
-        #     approvers: DamianHinz
-        #     minimum-approvals: ${{ vars.MINIMUM_APPROVALS }}
-        #     issue-title: "External PR: Waiting for approval"
-        #     issue-body: "Please approve with 'yes', 'go', 'approve', 'approved', 'lgtm'  or deny with 'deny', 'denied', 'no', 'stop'. The workflow will be stopped automatically after ${{ vars.PR_TIMEOUT_MINUTES }} Minutes."
-        #     exclude-workflow-initiator-as-approver: false
-        #     additional-approved-words: 'GO'
-        #     additional-denied-words: 'STOP'
-        
         #Will only be triggered if external PRs is approved before
         - name: Call Workflow
           if: ${{ steps.user_affiliation.outputs.isTeamMember == 'false'}}
@@ -80,13 +65,12 @@ jobs:
         
         - name: trigger-labeled-workflow
           if: ${{ steps.extract-artifact.outputs.labels == 'true' }}
-          run: echo "test passed"
-
-            
-
-  
-  # internal-PR:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checking User Identity
-        
+          env: 
+            GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+          run: |
+            gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
+            -f "ref=main"
