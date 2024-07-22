@@ -14,7 +14,7 @@ jobs:
         - name: 
           id: up-labels
           env: 
-            LABEL: ${{ github.event.label.name }}
+            LABEL: ${{ github.event.pull_request.labels.*.name }}
           run: |
             mkdir -p ./label
             echo $LABEL > ./label/label
