@@ -8,6 +8,11 @@ on:
   workflow_run:
     workflows: [PR workflow workaround]
     types: [completed]
+
+concurrency:
+  group: trigger-group
+  cancel-in-progress: false
+
 jobs:
   Checking-PR:
       runs-on: ubuntu-latest
