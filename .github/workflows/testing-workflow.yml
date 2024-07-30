@@ -2,3 +2,38 @@ name: testing_workflow
 
 on:
   workflow_dispatch:
+    inputs:
+      all_env:
+        type: boolean
+        description: All
+      redshift_env:
+        type: boolean
+        description: Redshift
+      postgres_env:
+        type: boolean
+        description: Postgres
+      synapse_env:
+        type: boolean
+        description: Synapse
+      snowflake_env:
+        type: boolean
+        description: Snwoflake
+      bigquery_env:
+        type: boolean
+        description: BigQuery
+
+jobs:
+  create-matrix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: generating-matrix-target
+        run: |
+          redshift=""
+          postgres=""
+          Synapse=""
+          Snowflake=""
+          BigQuery=""
+          if [${{ inputs.all_env }}]; then
+            echo "synapse, postgres, bigquery, redshift, snowflake"
+          fi
+          
