@@ -48,6 +48,7 @@ jobs:
             workflow_search: false
             skip_unpack: false
             path: ./
+            allow_forks: true
 
         - name: extract-artifact
           id: extract-artifact
