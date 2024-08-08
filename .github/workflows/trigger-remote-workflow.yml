@@ -54,7 +54,10 @@ jobs:
           #if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
           run: |
             echo "labels=$(cat label/label)" >> $GITHUB_OUTPUT
+            echo "labels=$(cat label/label)"
             echo "prid=$(cat prid/prid)" >> $GITHUB_OUTPUT
+            echo "prid=$(cat prid/prid)"
+
         
         #Will only be triggered if external PRs is approved before
         - name: Call Workflow
@@ -81,4 +84,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
-            -f "ref=PR-Branch-testing" -f "inputs[name]=${{ steps.extract-artifact.outputs.prid }}"
+            -f "ref=PR-Branch-testing" -f "inputs[prid]=${{ steps.extract-artifact.outputs.prid }}"
