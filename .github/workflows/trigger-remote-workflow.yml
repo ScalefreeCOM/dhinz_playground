@@ -79,4 +79,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
-            -f "ref=main" -f "inputs[name]=${{ steps.extract-artifact.outputs.prid }}"
+            -f "ref=PR-Branch-testing" -f "inputs[name]=${{ steps.extract-artifact.outputs.prid }}"
