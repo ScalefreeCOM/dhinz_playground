@@ -35,8 +35,19 @@ jobs:
             username: ${{ github.actor }}
             team: 'Datavault4dbt Devs'
 
-        - name: Outpu Team Membership
+        - name: Output Team Membership
           run: echo "Member of datavault4dbt dev team; ${{ steps.user_affiliation.outputs.isTeamMember }}"
+
+        - name: downloading-artifacts
+          #if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
+          id: download-artifact
+          uses: dawidd6/action-download-artifact@v6
+          with:
+            github_token: ${{ steps.generate_token.outputs.token }}
+            workflow: PR-workflow-workaround.yml
+            workflow_search: false
+            skip_unpack: false
+            path: ./
 
         - name: extract-artifact
           id: extract-artifact
@@ -58,16 +69,7 @@ jobs:
             /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
             -f "ref=PR-Branch-testing" -f "inputs[prid]=${{ steps.extract-artifact.outputs.prid }}"
 
-        - name: downloading-artifacts
-          if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
-          id: download-artifact
-          uses: dawidd6/action-download-artifact@v6
-          with:
-            github_token: ${{ steps.generate_token.outputs.token }}
-            workflow: PR-workflow-workaround.yml
-            workflow_search: false
-            skip_unpack: false
-            path: ./
+        
         
         - name: trigger-labeled-workflow
           if: ${{ steps.extract-artifact.outputs.labels == 'true' }}
