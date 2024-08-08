@@ -20,7 +20,7 @@ jobs:
           id: up-labels
           env: 
             LABEL: ${{ contains(github.event.pull_request.labels.*.name, 'testing') }}
-            PRID: ${{ github.event.pull_request.id }}
+            PRID: ${{ github.event.number }}
           run: |
             mkdir -p ./label
             echo $LABEL > ./label/label
