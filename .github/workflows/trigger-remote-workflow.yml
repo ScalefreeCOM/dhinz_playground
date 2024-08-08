@@ -67,6 +67,7 @@ jobs:
           if: ${{ steps.user_affiliation.outputs.isTeamMember == 'true'}}
           run: |
             echo "labels=$(cat label/label)" >> $GITHUB_OUTPUT
+            echo "prid=$(cat prid/prid)" >> $GITHUB_OUTPUT
         
         - name: trigger-labeled-workflow
           if: ${{ steps.extract-artifact.outputs.labels == 'true' }}
@@ -78,4 +79,4 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             /repos/ScalefreeCOM/datavault4dbt-ci-cd/actions/workflows/remote-test-endpoint.yml/dispatches \
-            -f "ref=fix-remote-trigger"
+            -f "ref=main" -f "inputs[name]=${{ steps.extract-artifact.outputs.prid }}"
